@@ -2,18 +2,25 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
 
-// Load the HTML file for the DOM
-const rootDirectory = path.resolve(__dirname, '..'); // Go up one directory from the test directory
+// Specify the root directory
+const rootDirectory = path.resolve(__dirname, '..');
+
+// Load the HTML file for the DOM BEFORE setting up the globals
 const html = fs.readFileSync(path.join(rootDirectory, 'index.html'), 'utf-8');
 
-// Expose the necessary globals from JSDOM to the Node.js environment
-global.document = window.document;
-global.window = window;
-global.navigator = window.navigator;
+// Create the JSDOM environment (this needs to happen FIRST)
+const dom = new JSDOM(html, { runScripts: "dangerously", resources: "usable" });
 
-// Load the script file
+// Make window and document globals (this needs to happen BEFORE loading your script)
+global.document = dom.window.document;
+global.window = dom.window;
+global.navigator = dom.window.navigator;
+
+// Load your script (only AFTER window and document are globals)
 const script = fs.readFileSync(path.join(rootDirectory, 'script.js'), 'utf-8');
-eval(script);
+
+// Execute the script only once, outside of any describe or it blocks
+dom.window.eval(script);
 
 // Now you can use the variables and functions from script.js in your tests
 const {
@@ -73,11 +80,12 @@ describe('Role Playing Game - Unit Tests', () => {
         goldText.innerText = gold;
         healthText.innerText = health;
         xpText.innerText = xp;
-        goTown();
+        
     });
 
     describe('Initialization', () => {
         it('should initialize the game with correct values', () => {
+            goTown()
             expect(xp).toBe(0);
             expect(health).toBe(100);
             expect(gold).toBe(50);
