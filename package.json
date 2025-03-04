@@ -1,0 +1,27 @@
+{
+  "name": "roleplayinggame",
+  "version": "1.0.0",
+  "description": "Test project",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexanderlhk/RolePlayingGameJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexanderlhk/RolePlayingGameJS/issues"
+  },
+  "homepage": "https://github.com/alexanderlhk/RolePlayingGameJS#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdom": "^26.0.0"
+  }
+}
