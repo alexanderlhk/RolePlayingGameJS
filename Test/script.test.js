@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Load the HTML file for the DOM
-const html = fs.readFileSync(path.resolve(__dirname, './index.html'), 'utf-8'); // Assuming index.html is in the same directory
-const { window } = new JSDOM(html, { runScripts: "dangerously", resources: "usable" });
+const rootDirectory = path.resolve(__dirname, '..'); // Go up one directory from the test directory
+const html = fs.readFileSync(path.join(rootDirectory, 'index.html'), 'utf-8');
 
 // Expose the necessary globals from JSDOM to the Node.js environment
 global.document = window.document;
@@ -12,7 +12,7 @@ global.window = window;
 global.navigator = window.navigator;
 
 // Load the script file
-const script = fs.readFileSync(path.resolve(__dirname, './script.js'), 'utf-8'); // Assuming script.js is in the same directory
+const script = fs.readFileSync(path.join(rootDirectory, 'script.js'), 'utf-8');
 eval(script);
 
 // Now you can use the variables and functions from script.js in your tests
